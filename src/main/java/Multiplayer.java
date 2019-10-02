@@ -48,28 +48,34 @@ public class Multiplayer implements MultiPlayerGame{
             throw new UnsupportedOperationException("La partie n'as pas été démarrée");
         }
         
-        if (this.games[this.currentPlayer].isFinished()){
+        if (this.games[this.games.length-1].isFinished() == false){
+            //vérifie si la partie est terminée avant de lancer la boule
+            this.games[currentPlayer].lancer(nombreDeQuillesAbattues);
+            if (this.games[this.currentPlayer].isFinished() || this.games[currentPlayer].hasCompletedFrame()){
+                nextTurn();
+                }
+            if (this.games[this.games.length-1].isFinished()){
+                return "Partie terminée.";
+            }
+            else{
+             return "Prochain tir : joueur "+this.players[currentPlayer]+", tour n° "+(this.turn+1)+", boule n° "+this.games[currentPlayer].getNextBallNumber();   
+            }
+        }
+        else{
             return "Partie terminée.";
         }
-        
-        this.games[currentPlayer].lancer(nombreDeQuillesAbattues);
-        if (this.games[currentPlayer].hasCompletedFrame()){
-            nextTurn();
-        } 
-        return "Prochain tir : joueur "+this.players[currentPlayer]+", tour n° "+(this.turn+1)+", boule n° "+this.games[currentPlayer].getNextBallNumber();
     }
 
     @Override
     public int scoreFor(String playerName) throws Exception {
         int cpt = -1;
-        int player;
         for (int i=0;i<this.players.length;i++){
             if (this.players[i].equals(playerName)){
                cpt = this.games[i].score();
             }
         }
         if (cpt == -1){
-            throw new Exception("La personne demandé ne joue pas dans laz partie.");
+            throw new UnsupportedOperationException("La personne demandé ne joue pas dans la partie.");
         }
         return cpt; 
     }

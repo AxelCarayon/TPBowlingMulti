@@ -81,12 +81,31 @@ public class MutiplayerTest {
     }
     
     @Test
-    public void gameEnded() throws Exception{
+    public void testgameEnded() throws Exception{
         /**
          * Test que la partie se termine correctement.
          */
-        rollMany(80, 1);
+        rollMany(79, 1);
         assertEquals("Partie terminée.",game.lancer(1));
+    }
+    
+    @Test (expected = UnsupportedOperationException.class)
+    public void testScoreUnexistingPlayer() throws Exception{
+        /**
+         * Test le renvoi d'une erreur si on essaie d'avoir le score d'une 
+         * personne qui n'est pas dans la partie.
+         */
+        game.scoreFor("Julien");
+    }
+    
+    @Test
+    public void testScore() throws Exception{
+        /**
+         * Test le renvoi correct du score.
+         */
+        assertEquals(0,game.scoreFor("Lucie"));
+        game.lancer(10);
+        assertEquals(10,game.scoreFor("Lucie"));
     }
     
     // Quelques methodes utilitaires pour faciliter l'écriture des tests
@@ -94,17 +113,5 @@ public class MutiplayerTest {
 		for (int i = 0; i < n; i++) {
 			game.lancer(pins);
 		}
-	}
-
-	private void rollSpare() throws Exception {
-		game.lancer(7);
-		game.lancer(3);
-	}
-
-	private void rollStrike() throws Exception {
-		game.lancer(10);
-	}
-    
-        
-    
+	}    
 }
